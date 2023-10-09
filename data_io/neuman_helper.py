@@ -10,6 +10,7 @@ import torch
 from tqdm import tqdm
 import PIL
 import scipy
+from scipy import stats
 
 from data_io import colmap_helper
 from geometry import pcd_projector
@@ -80,7 +81,7 @@ class NeuManCapture(captures_module.RigRGBDPinholeCapture):
             valid_mask = (self.depth_map > 0) & (self.mask == 0)
             x = self.mono_depth_map[valid_mask]
             y = self.depth_map[valid_mask]
-            res = scipy.stats.linregress(x, y)
+            res = stats.linregress(x, y)
             self._fused_depth_map = self.depth_map.copy()
             self._fused_depth_map[~valid_mask] = self.mono_depth_map[~valid_mask] * res.slope + res.intercept
         return self._fused_depth_map
@@ -345,8 +346,10 @@ class NeuManReader():
         for view_id in range(num_views):
             for cam_id in range(num_cams):
                 raw_cap = raw_scene.captures[counter]
-                depth_path = raw_cap.image_path.replace('/images/', '/depth_maps/') + '.geometric.bin'
-                mono_depth_path = raw_cap.image_path.replace('/images/', '/mono_depth/')
+                depth_path = raw_cap.image_path.replace('\images\\', '/depth_maps/') + '.geometric.bin'
+                mono_depth_path = raw_cap.image_path.replace('\images\\', '/mono_depth/')
+                # print(depth_path)
+                # print(mono_depth_path)
                 if not os.path.isfile(depth_path):
                     depth_path = raw_cap.image_path + 'dummy'
                     print(f'can not find mvs depth for {os.path.basename(raw_cap.image_path)}')
