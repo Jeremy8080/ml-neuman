@@ -131,12 +131,9 @@ RUN . /root/.bashrc && \
     pip install -r requirements.txt && \
     pip install -v -e . && \
     pip install openmim && \
-    mim install mmdet && \
-    pip uninstall mmcv-full && \
-    pip uninstall mmcv && \
-    pip uninstall mmdet && \
-    pip install mmcv-full==1.5.0 -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.11.0/index.html && \
-    pip install mmdet==3.0.0
+    mim install mmdet==3.0.0 && \
+    pip uninstall mmcv -y && \
+    pip install mmcv-full==1.5.0 -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.11.0/index.html
 
 # NeuMan environment
 RUN . /root/.bashrc && \
